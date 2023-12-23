@@ -1,0 +1,201 @@
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Users</h1>
+    <p class="mb-4">DataTables is a third party plugin that is used to generate the demo table below.
+        For more information about DataTables, please visit the <a target="_blank"
+            href="https://datatables.net">official DataTables documentation</a>.</p>
+
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">DataTables Example</h6>           
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered dataTable" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>S.No.</th>                          
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Mobile</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (users !='' ) { %>
+                            <% users.forEach((user,index)=> { %>
+                                <tr class="align-middle">
+                                    <td>
+                                        <%= index+1 %>
+                                        <input type="hidden" class="hdn" value="<%= user.id %>">
+                                    </td>                                    
+                                    <td>
+                                        <%= user.name %>
+                                    </td>
+                                    <td>
+                                        <%= user.email %>
+                                    </td>
+                                    <td>
+                                        <%= user.mobile %>
+                                    </td>
+                                    <td>
+                                        <% if (user.email != email) { %>                                       
+                                       
+                                        <a href="#" class="edit text-success"><i class="fas fa-edit fa-lg mx-1"></i></a>
+                                        <a href="#" class="delEmp text-danger"><i class="fas fa-trash fa-lg mx-1"></i></a>
+                                        <% } %>
+                                    </td>
+                                </tr>
+                                <% }) %>
+                                    <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Add New Employee</h5>
+                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"><i
+                            class="fa fa-window-close" aria-hidden="true"></i></button>
+                </div>
+                <form action="/employee/add" method="post" id="add-form" enctype="multipart/form-data">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="name">Name</label>
+                            <input type="text" class="form-control form-control-md" name="name" placeholder="Enter Name"
+                                required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email">Email</label>
+                            <input type="email" class="form-control form-control-md" name="email"
+                                placeholder="Enter Email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="phone">Phone</label>
+                            <input type="number" class="form-control form-control-md" name="phone"
+                                placeholder="Enter Phone" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="formFile" class="form-label">Select Image</label>
+                            <input class="form-control" type="file" name="image" id="formFile">
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <input type="submit" name="submit" value="Submit" class="btn btn-primary">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="staticBackdropupd" data-backdrop="static" data-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Modify Employee</h5>
+                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"><i
+                            class="fa fa-window-close" aria-hidden="true"></i></button>
+                </div>
+                <form id="upd-form" enctype="multipart/form-data">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="name">Name</label>
+                            <input type="hidden" name="eid" id="eId">
+                            <input type="text" class="form-control form-control-md" id="ename" name="ename"
+                                placeholder="Enter Name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email">Email</label>
+                            <input type="email" class="form-control form-control-md" id="eemail" name="eemail"
+                                placeholder="Enter Email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="phone">Phone</label>
+                            <input type="number" class="form-control form-control-md" id="ephone" name="ephone"
+                                placeholder="Enter Phone" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="formFile" class="form-label">Select Image</label>
+                            <input class="form-control" type="file" name="eimage" id="formFile">
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="btnUpdate" class="btn btn-primary">Submit</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script>
+    $(document).ready(function () {
+        console.log(window.location.origin);
+        $('a.delEmp').on('click', function (e) {
+            var tr = $(this).closest('tr');
+            let id = tr.find(".hdn").val().trim()
+            let email = tr.find("td:eq(3)").text().trim();
+            if (confirm('Are you sure want to delete  EmailID: ' + email)) {
+                $.ajax({
+                    url: '/employee/delete/' + id,
+                    type: 'delete',
+                    success: function (res) {
+                        $('#staticBackdropupd').modal('hide');
+                        window.location.href = window.location.origin + '/employee'
+                    },
+                    error: function (e) { console.log(e) }
+                });
+            }
+        });
+        $('a.edit').on('click', function (e) {
+            e.preventDefault();
+            var tr = $(this).closest('tr');
+            $('#eId').val(tr.find(".hdn").val().trim());
+            $('#ename').val(tr.find("td:eq(2)").text().trim());
+            $('#eemail').val(tr.find("td:eq(3)").text().trim());
+            $('#ephone').val(tr.find("td:eq(4)").text().trim());
+            modal = $('#staticBackdropupd');
+            modal.modal('show');
+
+            // make AJAX call passing the ID
+            // $.getJSON('/admin/categories/get-cateory/' + tr.data('id'), function (data) {
+            //     // set values in modal
+            //     // modal.find('form').attr('action', '/admin/categories/get-cateory/' + tr.data('id') );
+            //     // modal.find('[name=title]').val( data.title );
+            //     // open modal
+            //     modal.modal('show');
+            // });
+        });
+
+        $('#btnUpdate').on('click', function (e) {
+
+            var edata = { id: parseInt($('#eId').val()), name: $('#ename').val(), email: $('#eemail').val(), phone: $('#ephone').val() }
+            $.ajax({
+                url: '/employee/update',
+                type: 'post',
+                data: edata,
+                success: function (res) {
+                    $('#staticBackdropupd').modal('hide');
+                    window.location.href = window.location.origin + '/employee'
+                },
+                error: function (e) { console.log(e) }
+            });
+
+        });
+    });
+
+</script>
+<!-- /.container-fluid -->
