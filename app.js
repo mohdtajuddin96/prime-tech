@@ -3,7 +3,7 @@ const errHandler = require('./middlewares/errorHandler')
 var express = require('express');
 const session = require('express-session')
 var path = require('path');
-
+var favicon=require('serve-favicon')
 //var logger = require('morgan');
 var expresslayouts = require('express-ejs-layouts')
 
@@ -11,6 +11,7 @@ var homRoutes = require('./routes/home.route');
 var empRoutes = require('./routes/employee.route')
 var accRoutes = require('./routes/account.route')
 var app = express();
+
 
 app.use(session({ secret: 'secret-key', saveUninitialized: true, resave: true }))
 // view engine setup
@@ -22,7 +23,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.use(express.static(path.join(__dirname, 'public')));
-
+app.use(favicon(path.join(__dirname, 'public','favicon.ico')))
 app.use(expresslayouts)
 app.set('layout', './layouts/layout')
 
