@@ -68,21 +68,21 @@
                     <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"><i
                             class="fa fa-window-close" aria-hidden="true"></i></button>
                 </div>
-                <form action="/employee/add" method="post" id="add-form" enctype="multipart/form-data">
+                <form id="add-form" action="/employee/add" method="post" enctype="multipart/form-data">
                     <div class="modal-body">
                         <div class="mb-3">
                             <label for="name">Name</label>
-                            <input type="text" class="form-control form-control-md" name="name" placeholder="Enter Name"
-                                required>
+                            <input type="text" class="form-control form-control-md" name="name" id="name"
+                                placeholder="Enter Name" required>
                         </div>
                         <div class="mb-3">
                             <label for="email">Email</label>
-                            <input type="email" class="form-control form-control-md" name="email"
+                            <input type="email" class="form-control form-control-md" name="email" id="email"
                                 placeholder="Enter Email" required>
                         </div>
                         <div class="mb-3">
                             <label for="phone">Phone</label>
-                            <input type="number" class="form-control form-control-md" name="phone"
+                            <input type="number" class="form-control form-control-md" name="phone" id="phone"
                                 placeholder="Enter Phone" required>
                         </div>
                         <div class="mb-3">
@@ -92,7 +92,7 @@
 
                     </div>
                     <div class="modal-footer">
-                        <input type="submit" name="submit" value="Submit" class="btn btn-primary">
+                        <button type="submit" id="btnAdd" class="btn btn-primary">Save</button>
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
                     </div>
                 </form>
@@ -109,7 +109,7 @@
                     <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"><i
                             class="fa fa-window-close" aria-hidden="true"></i></button>
                 </div>
-                <form id="upd-form" enctype="multipart/form-data">
+                <form id="upd-form" action="/employee/update" method="post" enctype="multipart/form-data">
                     <div class="modal-body">
                         <div class="mb-3">
                             <label for="name">Name</label>
@@ -129,12 +129,12 @@
                         </div>
                         <div class="mb-3">
                             <label for="formFile" class="form-label">Select Image</label>
-                            <input class="form-control" type="file" name="eimage" id="formFile">
+                            <input class="form-control" type="file" name="eimage" id="eformFile">
                         </div>
 
                     </div>
                     <div class="modal-footer">
-                        <button type="button" id="btnUpdate" class="btn btn-primary">Submit</button>
+                        <button type="submit" id="btnUpdate" class="btn btn-primary">Save</button>
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
                     </div>
                 </form>
@@ -145,7 +145,7 @@
 <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 <script>
     $(document).ready(function () {
-        console.log(window.location.origin);
+    
         $('a.delEmp').on('click', function (e) {
             var tr = $(this).closest('tr');
             let id = tr.find(".hdn").val().trim()
@@ -162,6 +162,7 @@
                 });
             }
         });
+
         $('a.edit').on('click', function (e) {
             e.preventDefault();
             var tr = $(this).closest('tr');
@@ -171,32 +172,22 @@
             $('#ephone').val(tr.find("td:eq(4)").text().trim());
             modal = $('#staticBackdropupd');
             modal.modal('show');
-
-            // make AJAX call passing the ID
-            // $.getJSON('/admin/categories/get-cateory/' + tr.data('id'), function (data) {
-            //     // set values in modal
-            //     // modal.find('form').attr('action', '/admin/categories/get-cateory/' + tr.data('id') );
-            //     // modal.find('[name=title]').val( data.title );
-            //     // open modal
-            //     modal.modal('show');
-            // });
         });
+       
+        // $('#btnUpdate').on('click', function (e) {
+        //     var edata = { id: parseInt($('#eId').val()), name: $('#ename').val(), email: $('#eemail').val(), phone: $('#ephone').val() }
+        //     $.ajax({
+        //         url: '/employee/update',
+        //         type: 'post',
+        //         data: edata,
+        //         success: function (res) {
+        //             $('#staticBackdropupd').modal('hide');
+        //             window.location.href = window.location.origin + '/employee'
+        //         },
+        //         error: function (e) { console.log(e) }
+        //     });
 
-        $('#btnUpdate').on('click', function (e) {
-
-            var edata = { id: parseInt($('#eId').val()), name: $('#ename').val(), email: $('#eemail').val(), phone: $('#ephone').val() }
-            $.ajax({
-                url: '/employee/update',
-                type: 'post',
-                data: edata,
-                success: function (res) {
-                    $('#staticBackdropupd').modal('hide');
-                    window.location.href = window.location.origin + '/employee'
-                },
-                error: function (e) { console.log(e) }
-            });
-
-        });
+        // });
     });
 
 </script>

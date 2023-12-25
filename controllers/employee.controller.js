@@ -19,37 +19,34 @@ const insertEmployee = async (req, res) => {
     const { name, email, phone } = req.body;
     try {
         const adresult = await db.query(queries.addEmp, [name, email, phone, req.file.filename])
-        res.redirect('./emp/empList', { title: 'Employees', email: req.session.email })
+        res.redirect('/employee')
     } catch (err) {
         console.log(err.message)
         res.json({ type: 'danger', message: err.message })
     }
 };
-const updateEmployee = async (req, res) => {
-    const { id, name, email, phone } = req.body;   
-    try {
-        const adresult = await db.query(queries.updateEmp, [name, email, phone, id])
-        res.status(200).json({ result: 'Record Upated' })
 
+const updateEmployee = async (req, res) => {
+    const { eid, ename, eemail, ephone } = req.body;      
+    try {
+        const adresult = await db.query(queries.updateEmp, [ename, eemail, ephone, req.file.filename, eid])
+        res.redirect('/employee')     
     } catch (err) {
         console.log(err.message)
         res.json({ type: 'danger', message: err.message })
     }
 };
-const deleteEmployee=async(req,res)=>{       
-    try {
-        const id=req.params.id;
-        console.log(id)
-        const adresult = await db.query(queries.deleteEmp, [id])
+
+const deleteEmployee = async (req, res) => {
+    try {    
+        const adresult = await db.query(queries.deleteEmp, [req.params.id])
         res.status(200).json({ result: 'Record Deleted' })
-       
     } catch (err) {
         console.log(err.message)
         res.json({ type: 'danger', message: err.message })
-    }  
+    }
 }
 
-
 module.exports = {
-    getEmployees, addEmployee, insertEmployee, updateEmployee,deleteEmployee
+    getEmployees, addEmployee, insertEmployee, updateEmployee, deleteEmployee
 }

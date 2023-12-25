@@ -11,11 +11,13 @@ var storage = multer.diskStorage({
 
 var upload = multer({ storage: storage }).single('image')
 
+var upload1 = multer({ storage: storage }).single('eimage')
+
 router.get("/", auth.isLogIn, controller.getEmployees);
 
 router.post("/add", upload, controller.insertEmployee)
 
-router.post("/update", controller.updateEmployee)
+router.post("/update", upload1, controller.updateEmployee)
 
 router.delete("/delete/:id", controller.deleteEmployee)
 
